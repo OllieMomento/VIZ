@@ -89,6 +89,7 @@ text {
 
 
 (function chart1() {
+ const doc;
 
    fetch('./airlines.graphml')
             .then(res => res.text())
@@ -97,7 +98,7 @@ text {
 
    function buildMapy (data) {
             const parser = new DOMParser();
-            const doc = parser.parseFromString(data, 'text/xml');
+            doc = parser.parseFromString(data, 'text/xml');
             console.log(doc);
     }
   
