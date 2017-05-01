@@ -116,10 +116,12 @@
         }
         for (i = 0; i < nodes.length; i++) {
           var data = nodes[i].querySelectorAll("data");
+          var x = data[0].innerHTML;
+          var y = data[2].innerHTML;
           var node = {
-            "x": data[0].innerHTML,
+            "x": x,
             "tooltip": data[1].innerHTML,
-            "y": data[2].innerHTML
+            "y": y
           };
           min_x = Math.min(min_x, x);
           max_x = Math.max(max_x, x);
