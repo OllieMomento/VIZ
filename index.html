@@ -83,7 +83,7 @@
 
   <script src="https://d3js.org/d3.v2.min.js"></script>
   <script src="fisheye.js"></script>
-   <script type="text/javascript" src="d3-ForceEdgeBundling.js"></script>
+  <script type="text/javascript" src="d3-ForceEdgeBundling.js"></script>
   <script>
     var doc;
     var nodes;
@@ -96,7 +96,7 @@
 
 
 
-      fetch('./airlines.graphml')
+      fetch('airlines.graphml')
         .then(res => res.text())
         .then(buildMapy)
         .then(renderGraph)
@@ -150,139 +150,89 @@
         }
 
         JSONgraph = JSON.stringify(graph);
+        console.log('Nodes', graph.nodes);
+        console.log('Edges', graph.links);
 
       }
 
 
 
       function renderGraph() {
-        //Run the FDEB algorithm using default values on the data
-                var fbundling = d3.ForceEdgeBundling().nodes(graph.nodes).edges(graph.edges);
-                var results = fbundling();
-                var svg = d3.select("#svg").append("svg")
-                    .attr("width", 1200)
-                    .attr("height", 600);
-                svg = svg.append('g');
-                svg.append('rect').attr({
-                    'fill': '#111155',
-                    'width': 1200,
-                    'height': 600
-                });
-                svg.attr('transform', 'translate(20, 20)');
-                var d3line = d3.svg.line()
-                    .x(function (d) {
-                        return d.x;
-                    })
-                    .y(function (d) {
-                        return d.y;
-                    })
-                    .interpolate("linear");
-                //plot the data
-                for (var i = 0; i < results.length; i++) {
-                    svg.append("path").attr("d", d3line(results[i]))
-                        .style("stroke-width", 1)
-                        .style("stroke", "#ff2222")
-                        .style("fill", "none")
-                        .style('stroke-opacity', 0.115);
-                }
-                //draw nodes
-                svg.selectAll('.node')
-                    .data(d3.entries(nnodes))
-                    .enter()
-                    .append('circle')
-                    .classed('node', true)
-                    .attr({
-                        'r': 2,
-                        'fill': '#ffee00'
-                    })
-                    .attr('cx', function (d) {
-                        return d.value.x;
-                    })
-                    .attr('cy', function (d) {
-                        return d.value.y;
-                    });
-
-
-/*
-        var width = 1000,
-          height = 560;
-
-        var color = d3.scale.category20();
-
-        var fisheye = d3.fisheye.circular()
-          .radius(120);
-
-        var force = d3.layout.force()
-          .charge(-240)
-          .linkDistance(40)
-          .size([width, height]);
-
-        var svg = d3.select("#chart1").append("svg")
-          .attr("width", width)
-          .attr("height", height);
-
-        svg.append("rect")
-          .attr("class", "background")
-          .attr("width", width)
-          .attr("height", height);
-
-        var data = graph;
-        console.log(data);
-
-        var n = data.nodes.length;
-
-        force.nodes(data.nodes).links(data.links);
-
-        // Run the layout a fixed number of times.
-        // The ideal number of times scales with graph complexity.
-        // Of course, don't run too long—you'll hang the page!
-        force.start();
-        for (var i = n; i > 0; --i) force.tick();
-        force.stop();
-
-
-
-        var link = svg.selectAll(".link")
-          .data(data.links)
-          .enter().append("line")
-          .attr("class", "link")
-          .attr("x1", function (d) { return d.source.x; })
-          .attr("y1", function (d) { return d.source.y; })
-          .attr("x2", function (d) { return d.target.x; })
-          .attr("y2", function (d) { return d.target.y; })
-          .style("stroke-width", function (d) { return Math.sqrt(d.value); });
-
-        var node = svg.selectAll(".node")
-          .data(data.nodes)
-          .enter().append("circle")
-          .attr("class", "node")
-          .attr("cx", function (d) { return d.x; })
-          .attr("cy", function (d) { return d.y; })
-          .attr("r", 4.5)
-          .style("fill", function (d) { return color(d.group); })
-          //.call(force.drag);
-/*
-        svg.on("mousemove", function () {
-          fisheye.focus(d3.mouse(this));
-
-          node.each(function (d) { d.fisheye = fisheye(d); })
-            .attr("cx", function (d) { return d.fisheye.x; })
-            .attr("cy", function (d) { return d.fisheye.y; })
-            .attr("r", function (d) { return d.fisheye.z * 4.5; });
-
-          link.attr("x1", function (d) { return d.source.fisheye.x; })
-            .attr("y1", function (d) { return d.source.fisheye.y; })
-            .attr("x2", function (d) { return d.target.fisheye.x; })
-            .attr("y2", function (d) { return d.target.fisheye.y; });
-        });*/
+       
+                var width = 1000,
+                  height = 560;
+        
+                var color = d3.scale.category20();
+        
+                var fisheye = d3.fisheye.circular()
+                  .radius(120);
+        
+                var force = d3.layout.force()
+                  .charge(-240)
+                  .linkDistance(40)
+                  .size([width, height]);
+        
+                var svg = d3.select("#chart1").append("svg")
+                  .attr("width", width)
+                  .attr("height", height);
+        
+                svg.append("rect")
+                  .attr("class", "background")
+                  .attr("width", width)
+                  .attr("height", height);
+        
+                var data = graph;
+                console.log(data);
+        
+                var n = data.nodes.length;
+        
+                force.nodes(data.nodes).links(data.links);
+        
+                // Run the layout a fixed number of times.
+                // The ideal number of times scales with graph complexity.
+                // Of course, don't run too long—you'll hang the page!
+                force.start();
+                for (var i = n; i > 0; --i) force.tick();
+                force.stop();
+        
+        
+        
+                var link = svg.selectAll(".link")
+                  .data(data.links)
+                  .enter().append("line")
+                  .attr("class", "link")
+                  .attr("x1", function (d) { return d.source.x; })
+                  .attr("y1", function (d) { return d.source.y; })
+                  .attr("x2", function (d) { return d.target.x; })
+                  .attr("y2", function (d) { return d.target.y; })
+                  .style("stroke-width", function (d) { return Math.sqrt(d.value); });
+        
+                var node = svg.selectAll(".node")
+                  .data(data.nodes)
+                  .enter().append("circle")
+                  .attr("class", "node")
+                  .attr("cx", function (d) { return d.x; })
+                  .attr("cy", function (d) { return d.y; })
+                  .attr("r", 4.5)
+                  .style("fill", function (d) { return color(d.group); })
+                  //.call(force.drag);
+        /*
+                svg.on("mousemove", function () {
+                  fisheye.focus(d3.mouse(this));
+        
+                  node.each(function (d) { d.fisheye = fisheye(d); })
+                    .attr("cx", function (d) { return d.fisheye.x; })
+                    .attr("cy", function (d) { return d.fisheye.y; })
+                    .attr("r", function (d) { return d.fisheye.z * 4.5; });
+        
+                  link.attr("x1", function (d) { return d.source.fisheye.x; })
+                    .attr("y1", function (d) { return d.source.fisheye.y; })
+                    .attr("x2", function (d) { return d.target.fisheye.x; })
+                    .attr("y2", function (d) { return d.target.fisheye.y; });
+                });*/
 
 
       }
 
     })();
-  </script>
-  <script>
-    GoogleAnalyticsObject = "ga", ga = function () { ga.q.push(arguments); }, ga.q = [], ga.l = +new Date;
-    ga("create", "UA-48272912-3", "ocks.org");
-    ga("send", "pageview");
   </script>
