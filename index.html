@@ -1,72 +1,71 @@
-
 <!DOCTYPE html>
 <html class="ocks-org do-not-copy">
 <meta charset="utf-8">
 <title>Fisheye Distortion</title>
 <style>
-
-@import url(./style.css?aea6f0a);
-
-#chart1 {
-  width: 960px;
-  height: 500px;
-  border: solid 1px #ccc;
-}
-
-text {
-  font: 10px sans-serif;
-}
-
-.background {
-  fill: none;
-  pointer-events: all;
-}
-
-#chart1 .node {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-
-#chart1 .link {
-  stroke: #999;
-  stroke-opacity: .6;
-  stroke-width: 1.5px;
-}
-
-#chart2, #chart3 {
-  width: 960px;
-  height: 180px;
-  border: solid 1px #ccc;
-}
-
-#chart2 path, #chart3 line {
-  fill: none;
-  stroke: #333;
-}
-
-#chart3 line {
-  shape-rendering: crispEdges;
-}
-
-#chart4 {
-  margin-left: -40px;
-  height: 506px;
-}
-
-#chart4 .background {
-  fill: #ddd;
-}
-
-#chart4 .dot {
-  stroke: #000;
-}
-
-.axis path, .axis line {
-  fill: none;
-  stroke: #fff;
-  shape-rendering: crispEdges;
-}
-
+  @import url(./style.css?aea6f0a);
+  #chart1 {
+    width: 960px;
+    height: 500px;
+    border: solid 1px #ccc;
+  }
+  
+  text {
+    font: 10px sans-serif;
+  }
+  
+  .background {
+    fill: none;
+    pointer-events: all;
+  }
+  
+  #chart1 .node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+  }
+  
+  #chart1 .link {
+    stroke: #999;
+    stroke-opacity: .6;
+    stroke-width: 1.5px;
+  }
+  
+  #chart2,
+  #chart3 {
+    width: 960px;
+    height: 180px;
+    border: solid 1px #ccc;
+  }
+  
+  #chart2 path,
+  #chart3 line {
+    fill: none;
+    stroke: #333;
+  }
+  
+  #chart3 line {
+    shape-rendering: crispEdges;
+  }
+  
+  #chart4 {
+    margin-left: -40px;
+    height: 506px;
+  }
+  
+  #chart4 .background {
+    fill: #ddd;
+  }
+  
+  #chart4 .dot {
+    stroke: #000;
+  }
+  
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #fff;
+    shape-rendering: crispEdges;
+  }
 </style>
 
 <header>
@@ -78,117 +77,123 @@ text {
 <p id="chart1">
 
 
-<footer>
- 
-</footer>
+  <footer>
 
-<script src="https://d3js.org/d3.v2.min.js"></script>
-<script src="fisheye.js"></script>
-<script>
+  </footer>
 
- var doc;
+  <script src="https://d3js.org/d3.v2.min.js"></script>
+  <script src="fisheye.js"></script>
+  <script>
+    var doc;
+    var nodes;
+    var edges;
 
-(function chart1() {
+    (function chart1() {
 
 
 
-   fetch('./airlines.graphml')
-            .then(res => res.text())
-            .then(buildMapy)
-            .catch(e => console.log(e));
+      fetch('./airlines.graphml')
+        .then(res => res.text())
+        .then(buildMapy)
+        .catch(e => console.log(e));
 
-   function buildMapy (data) {
-            const parser = new DOMParser();
-            doc = parser.parseFromString(data, 'text/xml');
-            console.log(doc);
-    }
-  
+      function buildMapy(data) {
+        const parser = new DOMParser();
+        doc = parser.parseFromString(data, 'text/xml');
 
-  var width = 960,
-      height = 500;
+      }
+      nodes = doc.querySelectorAll("node");
+      edges = doc.querySelectorAll("edge");
+      
 
-  var color = d3.scale.category20();
+      for (i = 0; i < nodes.length; i++) {
+       var data = nodes[i].querySelectorAll("data");
+       
+      }
 
-  var fisheye = d3.fisheye.circular()
-      .radius(120);
+      var width = 960,
+        height = 500;
 
-  var force = d3.layout.force()
-      .charge(-240)
-      .linkDistance(40)
-      .size([width, height]);
+      var color = d3.scale.category20();
 
-  var svg = d3.select("#chart1").append("svg")
-      .attr("width", width)
-      .attr("height", height);
+      var fisheye = d3.fisheye.circular()
+        .radius(120);
 
-  svg.append("rect")
-      .attr("class", "background")
-      .attr("width", width)
-      .attr("height", height);
+      var force = d3.layout.force()
+        .charge(-240)
+        .linkDistance(40)
+        .size([width, height]);
 
-  d3.json("miserables.json", function(data) {
-    var n = data.nodes.length;
+      var svg = d3.select("#chart1").append("svg")
+        .attr("width", width)
+        .attr("height", height);
 
-    force.nodes(data.nodes).links(data.links);
+      svg.append("rect")
+        .attr("class", "background")
+        .attr("width", width)
+        .attr("height", height);
 
-    // Initialize the positions deterministically, for better results.
-    data.nodes.forEach(function(d, i) { d.x = d.y = width / n * i; });
+      d3.json("miserables.json", function (data) {
+        var n = data.nodes.length;
 
-    // Run the layout a fixed number of times.
-    // The ideal number of times scales with graph complexity.
-    // Of course, don't run too long—you'll hang the page!
-    force.start();
-    for (var i = n; i > 0; --i) force.tick();
-    force.stop();
+        force.nodes(data.nodes).links(data.links);
 
-    // Center the nodes in the middle.
-    var ox = 0, oy = 0;
-    data.nodes.forEach(function(d) { ox += d.x, oy += d.y; });
-    ox = ox / n - width / 2, oy = oy / n - height / 2;
-    data.nodes.forEach(function(d) { d.x -= ox, d.y -= oy; });
+        // Initialize the positions deterministically, for better results.
+        data.nodes.forEach(function (d, i) { d.x = d.y = width / n * i; });
 
-    var link = svg.selectAll(".link")
-        .data(data.links)
-      .enter().append("line")
-        .attr("class", "link")
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; })
-        .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+        // Run the layout a fixed number of times.
+        // The ideal number of times scales with graph complexity.
+        // Of course, don't run too long—you'll hang the page!
+        force.start();
+        for (var i = n; i > 0; --i) force.tick();
+        force.stop();
 
-    var node = svg.selectAll(".node")
-        .data(data.nodes)
-      .enter().append("circle")
-        .attr("class", "node")
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; })
-        .attr("r", 4.5)
-        .style("fill", function(d) { return color(d.group); })
-        .call(force.drag);
+        // Center the nodes in the middle.
+        var ox = 0, oy = 0;
+        data.nodes.forEach(function (d) { ox += d.x, oy += d.y; });
+        ox = ox / n - width / 2, oy = oy / n - height / 2;
+        data.nodes.forEach(function (d) { d.x -= ox, d.y -= oy; });
 
-    svg.on("mousemove", function() {
-      fisheye.focus(d3.mouse(this));
+        var link = svg.selectAll(".link")
+          .data(data.links)
+          .enter().append("line")
+          .attr("class", "link")
+          .attr("x1", function (d) { return d.source.x; })
+          .attr("y1", function (d) { return d.source.y; })
+          .attr("x2", function (d) { return d.target.x; })
+          .attr("y2", function (d) { return d.target.y; })
+          .style("stroke-width", function (d) { return Math.sqrt(d.value); });
 
-      node.each(function(d) { d.fisheye = fisheye(d); })
-          .attr("cx", function(d) { return d.fisheye.x; })
-          .attr("cy", function(d) { return d.fisheye.y; })
-          .attr("r", function(d) { return d.fisheye.z * 4.5; });
+        var node = svg.selectAll(".node")
+          .data(data.nodes)
+          .enter().append("circle")
+          .attr("class", "node")
+          .attr("cx", function (d) { return d.x; })
+          .attr("cy", function (d) { return d.y; })
+          .attr("r", 4.5)
+          .style("fill", function (d) { return color(d.group); })
+          .call(force.drag);
 
-      link.attr("x1", function(d) { return d.source.fisheye.x; })
-          .attr("y1", function(d) { return d.source.fisheye.y; })
-          .attr("x2", function(d) { return d.target.fisheye.x; })
-          .attr("y2", function(d) { return d.target.fisheye.y; });
-    });
-  });
-})();
+        svg.on("mousemove", function () {
+          fisheye.focus(d3.mouse(this));
 
-</script>
-<script>
+          node.each(function (d) { d.fisheye = fisheye(d); })
+            .attr("cx", function (d) { return d.fisheye.x; })
+            .attr("cy", function (d) { return d.fisheye.y; })
+            .attr("r", function (d) { return d.fisheye.z * 4.5; });
 
-GoogleAnalyticsObject = "ga", ga = function() { ga.q.push(arguments); }, ga.q = [], ga.l = +new Date;
-ga("create", "UA-48272912-3", "ocks.org");
-ga("send", "pageview");
+          link.attr("x1", function (d) { return d.source.fisheye.x; })
+            .attr("y1", function (d) { return d.source.fisheye.y; })
+            .attr("x2", function (d) { return d.target.fisheye.x; })
+            .attr("y2", function (d) { return d.target.fisheye.y; });
+        });
+      });
+    })();
 
-</script>
+  </script>
+  <script>
+    GoogleAnalyticsObject = "ga", ga = function () { ga.q.push(arguments); }, ga.q = [], ga.l = +new Date;
+    ga("create", "UA-48272912-3", "ocks.org");
+    ga("send", "pageview");
 
+  </script>
