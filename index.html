@@ -169,8 +169,6 @@
 
         force.nodes(data.nodes).links(data.links);
 
-        // Initialize the positions deterministically, for better results.
-        data.nodes.forEach(function (d, i) { d.x = d.y = width / n * i; });
 
         // Run the layout a fixed number of times.
         // The ideal number of times scales with graph complexity.
