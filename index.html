@@ -103,14 +103,16 @@
         nodes = doc.querySelectorAll("node");
         edges = doc.querySelectorAll("edge");
 
-      }
+        for (i = 0; i < nodes.length; i++) {
+          var data = nodes[i].querySelectorAll("data");
 
-
-
-      for (i = 0; i < nodes.length; i++) {
-        var data = nodes[i].querySelectorAll("data");
+        }
 
       }
+
+
+
+
 
       var width = 960,
         height = 500;
