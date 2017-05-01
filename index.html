@@ -90,15 +90,17 @@ text {
 
 (function chart1() {
 
-  var Connect = new XMLHttpRequest();
-  // Define which file to open and
-  // send the request.
-  Connect.open("GET", "airlines.graphml", false);
-  Connect.setRequestHeader("Content-Type", "text/xml");
-  Connect.send(null);
-  // Place the response in an XML document.
-  var TheDocument = Connect.responseXML;
-  console.log(TheDocument);
+   fetch('./airlines.graphml')
+            .then(res => res.text())
+            .then(buildMapy)
+            .catch(e => console.log(e));
+
+   function buildMapy (data) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data, 'text/xml');
+            
+        }
+  console.log(doc);
 
   var width = 960,
       height = 500;
