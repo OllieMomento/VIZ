@@ -117,11 +117,11 @@
           };
           graph.nodes.push(node);
         }
-        
+
         for (i = 0; i < edges.length; i++) {
-          var id = Number(nodes[i].getAtributte("id"))
-          var source = Number(nodes[i].getAtributte("source"))
-          var target = Number(nodes[i].getAtributte("target"))
+          var id = Number(nodes[i].getAttribute("id"))
+          var source = Number(nodes[i].getAttribute("source"))
+          var target = Number(nodes[i].getAttribute("target"))
           var edge = {
             "source": source,
             "target": target,
