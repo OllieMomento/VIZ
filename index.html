@@ -86,8 +86,11 @@ text {
 <script src="fisheye.js"></script>
 <script>
 
-function parser(){
- var Connect = new XMLHttpRequest();
+
+
+(function chart1() {
+
+  var Connect = new XMLHttpRequest();
   // Define which file to open and
   // send the request.
   Connect.open("GET", "airlines.graphml", false);
@@ -95,11 +98,6 @@ function parser(){
   Connect.send(null);
   // Place the response in an XML document.
   var TheDocument = Connect.responseXML;
-}
-
-(function chart1() {
-
-  parser();
 
   var width = 960,
       height = 500;
