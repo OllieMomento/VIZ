@@ -162,9 +162,9 @@
         .attr("width", width)
         .attr("height", height);
 
-      d3.json(JSONgraph, function (data) {
+        var data = graph;
         console.log(data);
-        
+
         var n = data.nodes.length;
 
         force.nodes(data.nodes).links(data.links);
@@ -218,7 +218,7 @@
             .attr("x2", function (d) { return d.target.fisheye.x; })
             .attr("y2", function (d) { return d.target.fisheye.y; });
         });
-      });
+      
 
       }
 
