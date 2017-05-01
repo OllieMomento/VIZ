@@ -162,7 +162,9 @@
         .attr("width", width)
         .attr("height", height);
 
-      d3.json(graph, function (data) {
+      d3.json(JSONgraph, function (data) {
+        console.log(data);
+        
         var n = data.nodes.length;
 
         force.nodes(data.nodes).links(data.links);
