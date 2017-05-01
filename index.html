@@ -100,15 +100,16 @@
       function buildMapy(data) {
         const parser = new DOMParser();
         doc = parser.parseFromString(data, 'text/xml');
+        nodes = doc.querySelectorAll("node");
+        edges = doc.querySelectorAll("edge");
 
       }
-      nodes = doc.querySelectorAll("node");
-      edges = doc.querySelectorAll("edge");
-      
+
+
 
       for (i = 0; i < nodes.length; i++) {
-       var data = nodes[i].querySelectorAll("data");
-       
+        var data = nodes[i].querySelectorAll("data");
+
       }
 
       var width = 960,
@@ -189,11 +190,9 @@
         });
       });
     })();
-
   </script>
   <script>
     GoogleAnalyticsObject = "ga", ga = function () { ga.q.push(arguments); }, ga.q = [], ga.l = +new Date;
     ga("create", "UA-48272912-3", "ocks.org");
     ga("send", "pageview");
-
   </script>
