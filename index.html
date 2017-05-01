@@ -119,9 +119,9 @@
         }
 
         for (i = 0; i < edges.length; i++) {
-          var id = Number(nodes[i].getAttribute("id"))
-          var source = Number(nodes[i].getAttribute("source"))
-          var target = Number(nodes[i].getAttribute("target"))
+          var id = Number(edges[i].getAttribute("id"))
+          var source = Number(edges[i].getAttribute("source"))
+          var target = Number(edges[i].getAttribute("target"))
           var edge = {
             "source": source,
             "target": target,
