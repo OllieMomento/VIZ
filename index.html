@@ -98,6 +98,7 @@
       fetch('./airlines.graphml')
         .then(res => res.text())
         .then(buildMapy)
+        .then(renderGraph)
         .catch(e => console.log(e));
 
       function buildMapy(data) {
@@ -137,8 +138,8 @@
 
 
       
-
-
+      function renderGraph(){
+        
       var width = 960,
         height = 500;
 
@@ -216,6 +217,9 @@
             .attr("y2", function (d) { return d.target.fisheye.y; });
         });
       });
+
+      }
+
     })();
   </script>
   <script>
