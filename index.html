@@ -86,7 +86,14 @@ text {
 <script src="fisheye.js"></script>
 <script>
 
+function parser(){
+  xmlDoc=loadXMLDoc("./airlines.graphml");
+}
+
 (function chart1() {
+
+  parser();
+
   var width = 960,
       height = 500;
 
