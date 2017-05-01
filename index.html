@@ -88,6 +88,8 @@
     var nodes;
     var edges;
 
+    var graph;
+
     (function chart1() {
 
 
@@ -102,10 +104,18 @@
         doc = parser.parseFromString(data, 'text/xml');
         nodes = doc.querySelectorAll("node");
         edges = doc.querySelectorAll("edge");
-
+        graph = {
+          "nodes": [],
+          "links": []
+        }
         for (i = 0; i < nodes.length; i++) {
           var data = nodes[i].querySelectorAll("data");
-
+          var node = {
+            "x": data[0].innerHTML,
+            "tooltip": data[1].innerHTML,
+            "y": data[2].innerHTML
+          };
+          graph.nodes[i].push(node);
         }
 
       }
