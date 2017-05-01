@@ -169,11 +169,6 @@
 
         force.nodes(data.nodes).links(data.links);
 
-        // Initialize the positions deterministically, for better results.
-        data.nodes.forEach(function (d, i) {
-          d.x = d.x;
-          d.y = d.y;
-          });
 
         // Run the layout a fixed number of times.
         // The ideal number of times scales with graph complexity.
@@ -182,11 +177,7 @@
         for (var i = n; i > 0; --i) force.tick();
         force.stop();
 
-        // Center the nodes in the middle.
-        var ox = 0, oy = 0;
-        data.nodes.forEach(function (d) { ox += d.x, oy += d.y; });
-        ox = ox / n - width / 2, oy = oy / n - height / 2;
-        data.nodes.forEach(function (d) { d.x -= ox, d.y -= oy; });
+        
 
         var link = svg.selectAll(".link")
           .data(data.links)
