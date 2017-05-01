@@ -102,6 +102,10 @@
         .catch(e => console.log(e));
 
       function buildMapy(data) {
+        var min_x = Number.MAX_VALUE;
+        var max_x = 0;
+        var min_y = Number.MAX_VALUE;
+        var max_y = 0;
         const parser = new DOMParser();
         doc = parser.parseFromString(data, 'text/xml');
         nodes = doc.querySelectorAll("node");
@@ -117,6 +121,10 @@
             "tooltip": data[1].innerHTML,
             "y": data[2].innerHTML
           };
+          min_x = Math.min(min_x, x);
+          max_x = Math.max(max_x, x);
+          min_y = Math.min(min_y, y);
+          max_y = Math.max(max_y, y);
           graph.nodes.push(node);
         }
 
@@ -131,36 +139,42 @@
           };
           graph.links.push(edge);
         }
+        var new_scale_x = d3.scale.linear().domain([min_x, max_x]).range([1000, 50]);
+        var new_scale_y = d3.scale.linear().domain([min_y, max_y]).range([560, 50]);
+        for (var i = 0; i < graph.nodes.length; i++) {
+          graph.nodes[i].x = new_scale_x(graph.nodes[i].x);
+          graph.nodes[i].y = new_scale_y(graph.nodes[i].y);
+        }
 
         JSONgraph = JSON.stringify(graph);
 
       }
 
 
-      
-      function renderGraph(){
-        
-      var width = 960,
-        height = 500;
 
-      var color = d3.scale.category20();
+      function renderGraph() {
 
-      var fisheye = d3.fisheye.circular()
-        .radius(120);
+        var width = 1000,
+          height = 560;
 
-      var force = d3.layout.force()
-        .charge(-240)
-        .linkDistance(40)
-        .size([width, height]);
+        var color = d3.scale.category20();
 
-      var svg = d3.select("#chart1").append("svg")
-        .attr("width", width)
-        .attr("height", height);
+        var fisheye = d3.fisheye.circular()
+          .radius(120);
 
-      svg.append("rect")
-        .attr("class", "background")
-        .attr("width", width)
-        .attr("height", height);
+        var force = d3.layout.force()
+          .charge(-240)
+          .linkDistance(40)
+          .size([width, height]);
+
+        var svg = d3.select("#chart1").append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+        svg.append("rect")
+          .attr("class", "background")
+          .attr("width", width)
+          .attr("height", height);
 
         var data = graph;
         console.log(data);
@@ -169,6 +183,8 @@
 
         force.nodes(data.nodes).links(data.links);
 
+        // Initialize the positions deterministically, for better results.
+        data.nodes.forEach(function (d, i) { d.x = d.y = width / n * i; });
 
         // Run the layout a fixed number of times.
         // The ideal number of times scales with graph complexity.
@@ -177,7 +193,7 @@
         for (var i = n; i > 0; --i) force.tick();
         force.stop();
 
-        
+
 
         var link = svg.selectAll(".link")
           .data(data.links)
@@ -212,7 +228,7 @@
             .attr("x2", function (d) { return d.target.fisheye.x; })
             .attr("y2", function (d) { return d.target.fisheye.y; });
         });
-      
+
 
       }
 
