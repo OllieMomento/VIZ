@@ -87,7 +87,14 @@ text {
 <script>
 
 function parser(){
- var xmlDoc = loadXMLDoc("./airlines.graphml");
+ var Connect = new XMLHttpRequest();
+  // Define which file to open and
+  // send the request.
+  Connect.open("GET", "airlines.graphml", false);
+  Connect.setRequestHeader("Content-Type", "text/xml");
+  Connect.send(null);
+  // Place the response in an XML document.
+  var TheDocument = Connect.responseXML;
 }
 
 (function chart1() {
